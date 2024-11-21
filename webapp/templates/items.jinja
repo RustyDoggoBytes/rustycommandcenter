@@ -1,0 +1,33 @@
+{% extends 'layout.jinja' %}
+
+{% block main %}
+    <nav>
+        <ul>
+            <li><a href="{% url "lists" %}"><i class='bx bx-left-arrow-alt'></i></a></li>
+        </ul>
+    </nav>
+    
+    <h1>{{ list.name }}</h1>
+    <article>
+        <form method="post" action="{% url "items" list_id=list.id %}">
+            <fieldset role="group">
+                {{ form.name }}
+                <button type="submit">Add</button>
+            </fieldset>
+        </form>
+        {% for item in items %}
+            <nav>
+                <label>
+                    <input type="checkbox"
+                           hx-post="{% url "edit-items" list_id=list.id id=item.id %}"
+                            {% if item.completed %} checked {% endif %}
+                    >
+                    {{ item.name }}
+                </label>
+                <a class="rtl" hx-delete="{% url "edit-items" list_id=list.id id=item.id %}"><i
+                        class='bx bxs-x-circle'></i></a>
+            </nav>
+        {% endfor %}
+
+    </article>
+{% endblock %}

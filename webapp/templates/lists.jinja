@@ -1,0 +1,28 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Lists{% endblock %}
+{% block main %}
+    <h1>Lists</h1>
+    <article>
+        <form method="post" action="{% url "lists" %}">
+            <fieldset role="group">
+                {{ form.name }}
+                <button type="submit">Add</button>
+            </fieldset>
+        </form>
+        {% for list in lists %}
+            <nav>
+            <span>
+
+                <a href="{% url "items" list_id=list.id %}"
+                >{{ list.name }}</a> ({{ list.item_count }})
+            </span>
+                <hr/>
+                <a class="rtl" hx-delete="{% url "edit-lists" id=list.id %}"
+                   hx-confirm="Are you sure you want to delete?"
+                ><i
+                        class='bx bxs-x-circle'></i></a>
+            </nav>
+        {% endfor %}
+    </article>
+{% endblock %}
