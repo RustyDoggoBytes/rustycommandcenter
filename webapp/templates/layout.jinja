@@ -13,12 +13,10 @@
     <title>Rusty Command Center {% block title %}{% endblock %}</title>
 </head>
 <body hx-boost="true" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-<main class="container-fluid">
-    <div class="grid">
-        {% block main %}
-            Update block main!
-        {% endblock %}
-    </div>
+<main class="container">
+    {% block main %}
+        Update block main!
+    {% endblock %}
 </main>
 </body>
 </html>

@@ -25,14 +25,28 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY",
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = [
+    'localhost',
+    'cc.rustydoggobytes.com',
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://0.0.0.0:8000',
+    'http://cc.rustydoggobytes.com:3000',
+    'http://cc.rustydoggobytes.com',
+    'https://cc.rustydoggobytes.com',
+    'https://cc.rustydoggobytes.com',
+]
+
 # Application definition
 
 INSTALLED_APPS = [
     'webapp.apps.WebappConfig',
 
-    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,7 +56,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

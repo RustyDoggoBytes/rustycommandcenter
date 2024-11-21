@@ -14,4 +14,4 @@ ENV DJANGO_DEBUG=False
 ENV DJANGO_SECRET_KEY='django-insecure-b$4bni*=tlqb_0l%gw-e-giailb8ft7nd07-#$s)0-ht@_^4^_'
 
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "rustycommandcenter.wsgi"]
