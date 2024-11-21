@@ -1,13 +1,9 @@
 {% extends 'layout.jinja' %}
 
+{% block title %}{{ list.name }}{% endblock  %}
 {% block main %}
-    <nav>
-        <ul>
-            <li><a href="{% url "lists" %}"><i class='bx bx-left-arrow-alt'></i></a></li>
-        </ul>
-    </nav>
     
-    <h1>{{ list.name }}</h1>
+    <h1><a href="{% url "lists" %}"><i class='bx bx-left-arrow-alt'></i></a>{{ list.name }}</h1>
     <article>
         <form method="post" action="{% url "items" list_id=list.id %}">
             <fieldset role="group">

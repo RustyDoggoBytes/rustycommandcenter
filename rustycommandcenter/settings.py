@@ -19,17 +19,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # TODO move this out of here!
-SECRET_KEY = 'django-insecure-b$4bni*=tlqb_0l%gw-e-giailb8ft7nd07-#$s)0-ht@_^4^_'
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY",
+                       'django-insecure-b$4bni*=tlqb_0l%gw-e-giailb8ft7nd07-#$s)0-ht@_^4^_'
+                       )
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
-
+CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
 
 INSTALLED_APPS = [
     'webapp.apps.WebappConfig',
 
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -74,7 +78,7 @@ WSGI_APPLICATION = 'rustycommandcenter.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'data' / 'db.sqlite3',
     }
 }
 

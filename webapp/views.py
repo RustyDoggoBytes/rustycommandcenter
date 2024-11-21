@@ -1,4 +1,5 @@
 from django.db.models import Count
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -6,6 +7,10 @@ from django.views import View
 from webapp.forms import AddItemForm, AddListForm
 from webapp.models import Item, List
 from webapp.utils.htmx import HTMX
+
+
+def index(request):
+    return redirect(reverse('lists'))
 
 
 class ItemsView(View):
@@ -77,3 +82,7 @@ class EditListView(View):
         return HTMX.redirect(
             reverse("lists"),
         )
+
+
+def health(request):
+    return HttpResponse("OK")
