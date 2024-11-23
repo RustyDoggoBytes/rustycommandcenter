@@ -27,20 +27,16 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = [
     'localhost',
-    'cc.rustydoggobytes.com',
+    '.rustydoggobytes.com',
 ]
-
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000',
     'http://localhost:8000',
-    'http://127.0.0.1:8000',
-    'http://0.0.0.0:8000',
-    'http://cc.rustydoggobytes.com:3000',
-    'http://cc.rustydoggobytes.com',
     'https://cc.rustydoggobytes.com',
-    'https://cc.rustydoggobytes.com',
+    'https://cc2.rustydoggobytes.com',
 ]
+
+CSRF_COOKIE_DOMAIN = '.rustydoggobytes.com'
 
 # Application definition
 
@@ -133,3 +129,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'

@@ -1,19 +1,32 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
 
-from webapp.forms import AddItemForm, AddListForm
+from webapp.forms import AddItemForm, AddListForm, LoginForm
 from webapp.models import Item, List
 from webapp.utils.htmx import HTMX
 
 
+@login_required(login_url="/login/")
 def index(request):
     return redirect(reverse('lists'))
 
 
-class ItemsView(View):
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.jinja'
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        return reverse('index')
+
+
+class ItemsView(LoginRequiredMixin, View):
     def get(self, request, list_id: int):
         return render(
             request,
@@ -35,7 +48,7 @@ class ItemsView(View):
         )
 
 
-class EditItemView(View):
+class EditItemView(LoginRequiredMixin,View):
     def delete(self, request, list_id: int, id: int):
         Item.objects.filter(list_id=list_id, id=id).delete()
 
@@ -53,7 +66,7 @@ class EditItemView(View):
         )
 
 
-class ListView(View):
+class ListView(LoginRequiredMixin,View):
     def get(self, request):
         lists = List.objects.annotate(item_count=Count("items")).all()
         return render(
@@ -75,7 +88,7 @@ class ListView(View):
         )
 
 
-class EditListView(View):
+class EditListView(LoginRequiredMixin,View):
     def delete(self, request, id: int):
         List.objects.filter(id=id).delete()
 
