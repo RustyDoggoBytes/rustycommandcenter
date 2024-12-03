@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
 from django.views import View
+from django.views.generic import TemplateView
 
 from webapp.forms import AddItemForm, AddListForm, LoginForm
 from webapp.models import Item, List
@@ -15,8 +16,80 @@ from webapp.utils.htmx import HTMX
 
 @login_required(login_url="/login/")
 def index(request):
-    return redirect(reverse('lists'))
+    return redirect(reverse('dashboard'))
 
+
+class CalendarView(TemplateView):
+    template_name = "calendar.jinja"
+
+class DashboardView(View):
+    def get(self, request):
+        return render(
+            request,
+            "dashboard.jinja",
+            context={
+                "user_chores": [
+                    {
+                        "name": "Everybody",
+                        "chores": [
+                            "Feed Rusty Breakfast",
+                            "Fill Rusty's Water",
+                            "Take Trash Out",
+                            "Do bed laundry",
+                        ],
+                        "completed_chores": [
+                            "Make Popcorn",
+                            "Feed Rusty",
+                        ]
+                    },
+                    {
+                        "name": "Ivan",
+                        "chores": [
+                            "Do Dishes",
+                            "Take Trash Out",
+                            "Do bed laundry",
+                        ],
+                        "completed_chores": [
+                            "Make Popcorn",
+                            "Feed Rusty",
+                        ]
+                    },
+                    {
+                        "name": "Megan",
+                        "chores": [
+                            "Prepare Salads",
+                            "Make breakfast",
+                        ],
+                        "completed_chores": [
+                            "Make Popcorn",
+                            "Feed Rusty",
+                        ]
+                    },
+                    {
+                        "name": "Isabela",
+                        "chores": [
+                            "Shower",
+                            "Brush teeth",
+                            "Put Toys Away",
+                        ],
+                        "completed_chores": [
+                        ]
+                    },
+                    {
+                        "name": "Luca",
+                        "chores": [
+                            "Shower",
+                            "Brush teeth",
+                            "Put Toys Away",
+                        ],
+                        "completed_chores": [
+                        ]
+                    }
+                ]
+
+
+            }
+            )
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.jinja'

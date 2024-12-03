@@ -1,0 +1,12 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block main %}
+<iframe id="open-web-calendar" 
+    style="background:url('https://raw.githubusercontent.com/niccokunzmann/open-web-calendar/master/static/img/loaders/circular-loader.gif') center center no-repeat;"
+    src="https://calendar.rustydoggobytes.com/calendar.html?css=.CALENDAR-INDEX-1%2C%20.CALENDAR-INDEX-1%20.dhx_body%2C%20.CALENDAR-INDEX-1%20.dhx_title%20%20%7B%20background-color%3A%20%23fe8445%3B%20%7D%20%0A&amp;url=https%3A%2F%2Fwww.calendarlabs.com%2Fical-calendar%2Fics%2F46%2FUSA.ics&amp;url=webcal%3A%2F%2Fp146-caldav.icloud.com%2Fpublished%2F2%2FMTE0MTA0NjI2NDExNDEwNNNGZGbLLk2hMYbmDgMdBNIjGdQ6ybf3-Q2vSgKOJ3a-CO1_695GpE2-uCDH4q28_EAKtRzrN5Vp8quIN3Ae2ws"
+    sandbox="allow-scripts allow-same-origin allow-top-navigation"
+    allowTransparency="true" scrolling="no" 
+    frameborder="0" height="600px" width="100%"></iframe>
+{% endblock %}

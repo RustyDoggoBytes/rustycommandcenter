@@ -1,0 +1,48 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block main %}
+    <div class="grid">
+        {% for user in user_chores %}
+            <article>
+                <header><h1>{{ user.name }}</h1></header>
+                <table>
+                    {% for chore in user.chores %}
+                        <tr>
+                            <td>{{ chore }}</td>
+                            <td>
+                                <button>Done</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <footer>
+                    <details>
+                        <summary>Done</summary>
+                        <ul>
+                            {% for chore in user.completed_chores %}
+                                <li><s>{{ chore }}</s></li>
+                            {% endfor %}
+                        </ul>
+                    </details>
+                </footer>
+            </article>
+        {% endfor %}
+    </div>
+    
+    <article>
+        <header><h2>Meals</h2></header>
+        <table>
+            <tr>
+                <th>Breakfast</th>
+                <th>Lunch</th>
+                <th>Dinner</th>
+            </tr>
+            <tr>
+                <th>Eggs + Toast</th>
+                <th>Jar Salad</th>
+                <th>Chicken Alfredo</th>
+            </tr>
+        </table>
+    </article>
+{% endblock %}

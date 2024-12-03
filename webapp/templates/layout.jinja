@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,13 +15,16 @@
 </head>
 <body hx-boost="true" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 {% block header %}
-    <header class="container">
+    <header class="container-fluid">
         <nav>
             <ul>
-                <li>Rusty Command Center</li>
+                <li>Command Center</li>
             </ul>
             <ul>
-                <li><a href="#" hx-post="{% url 'logout' %}" hx-target="body">Logout</a></li>
+                <li><a href="{% url "dashboard" %}">Dashboard</a></li>
+                <li><a href="{% url "calendar" %}">Calendar</a></li>
+                <li>{% include "weather_widget.jinja" %}</li>
+                {#                <li><a href="#" hx-post="{% url 'logout' %}" hx-target="body">Logout</a></li>#}
             </ul>
 
         </nav>
