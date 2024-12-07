@@ -1,7 +1,8 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
 
-from .models import Item, List
+from .models import Item, List, Meal, User
 
 admin.site.register(List)
 admin.site.register(Item)
+admin.site.register(Meal)
+admin.site.register(User)

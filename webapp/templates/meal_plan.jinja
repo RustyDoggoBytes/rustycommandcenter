@@ -1,0 +1,23 @@
+{% extends 'layout.jinja' %}
+
+{% block title %}Meal Plan{% endblock %}
+{% block main %}
+    <form method="post">
+        {{ formset.management_form }}
+        {% csrf_token %}
+        <h2>Meal Plan</h2>
+
+        {% for form in formset %}
+            <article>
+                <header>
+                    {{ form.instance.get_dow_display }}
+                </header>
+                <div class="grid">
+                    {{ form }}
+                </div>
+            </article>
+        {% endfor %}
+
+        <button type="submit">Save Meals</button>
+    </form>
+{% endblock %}

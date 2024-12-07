@@ -1,105 +1,81 @@
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
-from webapp.forms import AddItemForm, AddListForm, LoginForm
-from webapp.models import Item, List
+from webapp.forms import AddItemForm, AddListForm, MealFormSet
+from webapp.models import Item, List, Meal, User
 from webapp.utils.htmx import HTMX
 
 
 @login_required(login_url="/login/")
 def index(request):
-    return redirect(reverse('dashboard'))
+    return redirect(reverse("dashboard"))
 
 
 class CalendarView(TemplateView):
     template_name = "calendar.jinja"
 
+
+def meal_plan_view(request):
+    # Fetch existing meals for the week (dow=0 to dow=6)
+    meals = Meal.objects.filter(day_of_week__in=range(7))
+
+    # If meals are not already in the database for each day, create a default Meal instance for each dow
+    for dow in range(7):
+        if not meals.filter(day_of_week=dow).exists():
+            Meal.objects.create(
+                day_of_week=dow
+            )  # Create empty meal if it doesn't exist for the day
+
+    formset = MealFormSet(
+        queryset=Meal.objects.filter(day_of_week__in=range(7)).order_by("day_of_week")
+    )
+
+    if request.method == "POST":
+        formset = MealFormSet(request.POST)
+
+        if formset.is_valid():
+            formset.save()
+
+    return render(request, "meal_plan.jinja", {"formset": formset})
+
+
 class DashboardView(View):
     def get(self, request):
+        user_chores = []
+        for user in User.objects.all():
+            user_chores.append(
+                {
+                    "name": user.name,
+                    "chores": Item.chores_objects.filter(user=user, completed=False),
+                    "completed_chores": Item.chores_objects.filter(
+                        user=user, completed=True
+                    ),
+                }
+            )
+
         return render(
             request,
             "dashboard.jinja",
             context={
-                "user_chores": [
-                    {
-                        "name": "Everybody",
-                        "chores": [
-                            "Feed Rusty Breakfast",
-                            "Fill Rusty's Water",
-                            "Take Trash Out",
-                            "Do bed laundry",
-                        ],
-                        "completed_chores": [
-                            "Make Popcorn",
-                            "Feed Rusty",
-                        ]
-                    },
-                    {
-                        "name": "Ivan",
-                        "chores": [
-                            "Do Dishes",
-                            "Take Trash Out",
-                            "Do bed laundry",
-                        ],
-                        "completed_chores": [
-                            "Make Popcorn",
-                            "Feed Rusty",
-                        ]
-                    },
-                    {
-                        "name": "Megan",
-                        "chores": [
-                            "Prepare Salads",
-                            "Make breakfast",
-                        ],
-                        "completed_chores": [
-                            "Make Popcorn",
-                            "Feed Rusty",
-                        ]
-                    },
-                    {
-                        "name": "Isabela",
-                        "chores": [
-                            "Shower",
-                            "Brush teeth",
-                            "Put Toys Away",
-                        ],
-                        "completed_chores": [
-                        ]
-                    },
-                    {
-                        "name": "Luca",
-                        "chores": [
-                            "Shower",
-                            "Brush teeth",
-                            "Put Toys Away",
-                        ],
-                        "completed_chores": [
-                        ]
-                    }
-                ]
+                "user_chores": user_chores,
+                "meals": Meal.today(),
+            },
+        )
 
 
-            }
-            )
+def dashboard_complete_task(request, id: int):
+    item = Item.chores_objects.get(id=id)
+    item.complete_task()
 
-class CustomLoginView(LoginView):
-    template_name = 'registration/login.jinja'
-    redirect_authenticated_user = True
-
-    def get_success_url(self):
-        return reverse('index')
+    return HTMX.redirect(reverse("dashboard"))
 
 
-class ItemsView(LoginRequiredMixin, View):
+class ItemsView(View):
     def get(self, request, list_id: int):
         return render(
             request,
@@ -108,7 +84,8 @@ class ItemsView(LoginRequiredMixin, View):
                 "items": Item.objects.filter(list_id=list_id),
                 "list": List.objects.get(id=list_id),
                 "form": AddItemForm(),
-            })
+            },
+        )
 
     def post(self, request, list_id: int):
         form = AddItemForm(request.POST)
@@ -121,7 +98,7 @@ class ItemsView(LoginRequiredMixin, View):
         )
 
 
-class EditItemView(LoginRequiredMixin,View):
+class EditItemView(View):
     def delete(self, request, list_id: int, id: int):
         Item.objects.filter(list_id=list_id, id=id).delete()
 
@@ -131,15 +108,14 @@ class EditItemView(LoginRequiredMixin,View):
 
     def post(self, request, list_id: int, id: int):
         item = Item.objects.get(list_id=list_id, id=id)
-        item.completed = not item.completed
-        item.save()
+        item.complete_task()
 
         return HTMX.redirect(
             reverse("items", kwargs={"list_id": list_id}),
         )
 
 
-class ListView(LoginRequiredMixin,View):
+class ListView(View):
     def get(self, request):
         lists = List.objects.annotate(item_count=Count("items")).all()
         return render(
@@ -148,7 +124,7 @@ class ListView(LoginRequiredMixin,View):
             context={
                 "lists": lists,
                 "form": AddListForm(),
-            }
+            },
         )
 
     def post(self, request):
@@ -156,12 +132,10 @@ class ListView(LoginRequiredMixin,View):
         if form.is_valid():
             form.save()
 
-        return HTMX.redirect(
-            reverse("lists")
-        )
+        return HTMX.redirect(reverse("lists"))
 
 
-class EditListView(LoginRequiredMixin,View):
+class EditListView(View):
     def delete(self, request, id: int):
         List.objects.filter(id=id).delete()
 

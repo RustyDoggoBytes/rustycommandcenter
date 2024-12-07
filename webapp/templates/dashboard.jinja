@@ -9,9 +9,9 @@
                 <table>
                     {% for chore in user.chores %}
                         <tr>
-                            <td>{{ chore }}</td>
+                            <td>{{ chore.name }}</td>
                             <td>
-                                <button>Done</button>
+                                <button hx-post="{% url "dashboard-task-complete" id=chore.id %}">Done</button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -21,7 +21,7 @@
                         <summary>Done</summary>
                         <ul>
                             {% for chore in user.completed_chores %}
-                                <li><s>{{ chore }}</s></li>
+                                <li><s>{{ chore.name }}</s></li>
                             {% endfor %}
                         </ul>
                     </details>
@@ -29,19 +29,21 @@
             </article>
         {% endfor %}
     </div>
-    
+
     <article>
         <header><h2>Meals</h2></header>
         <table>
+            <thead>
             <tr>
                 <th>Breakfast</th>
                 <th>Lunch</th>
                 <th>Dinner</th>
             </tr>
+            </thead>
             <tr>
-                <th>Eggs + Toast</th>
-                <th>Jar Salad</th>
-                <th>Chicken Alfredo</th>
+                <td>{{ meals.breakfast }}</td>
+                <td>{{ meals.lunch }}</td>
+                <td>{{ meals.dinner }}</td>
             </tr>
         </table>
     </article>
