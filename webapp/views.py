@@ -146,3 +146,7 @@ class EditListView(View):
 
 def health(request):
     return HttpResponse("OK")
+
+
+def test(request):
+    return render(request, "test.jinja")

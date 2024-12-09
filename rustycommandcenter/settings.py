@@ -28,8 +28,7 @@ SECRET_KEY = os.getenv(
 DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = [
-    "localhost",
-    ".rustydoggobytes.com",
+    "*",
 ]
 
 # Application definition

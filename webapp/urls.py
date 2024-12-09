@@ -28,4 +28,5 @@ urlpatterns = [
         views.EditItemView.as_view(),
         name="edit-items",
     ),
+    path("test/", views.test, name="test"),
 ]
