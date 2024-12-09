@@ -6,6 +6,7 @@ from webapp.views import (
     CalendarView,
     dashboard_complete_task,
     meal_plan_view,
+    dashboard_meal_view,
 )
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
         dashboard_complete_task,
         name="dashboard-task-complete",
     ),
+    path("dashboard-meals/", dashboard_meal_view, name="dashboard-meal"),
     path("calendar/", CalendarView.as_view(), name="calendar"),
     path("meal-plan/", meal_plan_view, name="meal-plan"),
     path("health/", views.health, name="health"),

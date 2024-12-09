@@ -4,7 +4,6 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
-from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView
 
 from webapp.forms import AddItemForm, AddListForm, MealFormSet
@@ -45,8 +44,17 @@ def meal_plan_view(request):
     return render(request, "meal_plan.jinja", {"formset": formset})
 
 
+def dashboard_meal_view(request):
+    return render(
+        request,
+        "dashboard_meals.jinja",
+        context={
+            "meals": Meal.today(),
+        },
+    )
+
+
 class DashboardView(View):
-    @xframe_options_exempt
     def get(self, request):
         user_chores = []
         for user in User.objects.all():
@@ -65,7 +73,6 @@ class DashboardView(View):
             "dashboard.jinja",
             context={
                 "user_chores": user_chores,
-                "meals": Meal.today(),
             },
         )
 

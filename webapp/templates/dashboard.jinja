@@ -1,4 +1,4 @@
-{% extends 'layout.jinja' %}
+{% extends 'haos_layout.jinja' %}
 
 {% block title %}Dashboard{% endblock %}
 {% block main %}
@@ -29,22 +29,4 @@
             </article>
         {% endfor %}
     </div>
-
-    <article>
-        <header><h2>Meals</h2></header>
-        <table>
-            <thead>
-            <tr>
-                <th>Breakfast</th>
-                <th>Lunch</th>
-                <th>Dinner</th>
-            </tr>
-            </thead>
-            <tr>
-                <td>{{ meals.breakfast }}</td>
-                <td>{{ meals.lunch }}</td>
-                <td>{{ meals.dinner }}</td>
-            </tr>
-        </table>
-    </article>
 {% endblock %}

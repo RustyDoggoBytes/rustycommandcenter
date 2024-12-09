@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    >
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
+    <title>Rusty Command Center {% block title %}{% endblock %}</title>
+    {% block head %}{% endblock %}
+</head>
+<body hx-boost="true" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+<main class="container-fluid">
+    {% block main %}
+        Update block main!
+    {% endblock %}
+</main>
+
+</body>
+</html>
