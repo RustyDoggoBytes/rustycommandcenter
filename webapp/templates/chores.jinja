@@ -1,0 +1,41 @@
+{% extends 'haos_layout.jinja' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block main %}
+<article>
+    <details {% if form.instance.pk %} open {% endif %}>
+        <summary role="button">Add/Edit Task</summary>
+        <form
+                {% if form.instance.pk %}
+                hx-put="{% url "chores-edit" id=form.instance.pk %}"
+                {% else %}
+                method="post"
+                {% endif %}
+        >
+            {{ form }}
+            <button type="submit">Submit</button>
+        </form>
+    </details>
+</article>
+
+{% for user in users %}
+    <article>
+        <header>
+            <h1>{{ user.name }} - id: {{ user.id }}</h1></header>
+        <table>
+            {% for chore in user.chores %}
+                <tr>
+                    <td>{{ chore.name }}</td>
+                    <td style="text-align: right">
+                        <a role="button" class="secondary" href="{% url "chores" %}?id={{ chore.id }}"
+                        >Edit</a>
+                        <a role="button" class="outline secondary" href="#"
+                           hx-delete="{% url "chores-edit" id=chore.id %}"
+                        >Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </article>
+{% endfor %}
+{% endblock %}

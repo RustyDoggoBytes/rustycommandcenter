@@ -14,6 +14,10 @@ class BaseModel(models.Model):
 class User(BaseModel):
     name = models.CharField(max_length=100)
 
+    @property
+    def chores(self):
+        return Item.chores_objects.filter(user=self)
+
     def __str__(self):
         return self.name
 
@@ -55,6 +59,24 @@ class Item(BaseModel):
             Item.objects.create(
                 name=self.name, list=self.list, user=self.user, recurring=True
             )
+
+    def relative_date_string(self):
+        # Get today's date
+        today = datetime.today().date()
+
+        # Calculate the difference between the given date and today
+        delta = self.created.date() - today
+
+        if delta.days == 0:
+            return "Today"
+        elif delta.days == 1:
+            return "Tomorrow"
+        elif delta.days == -1:
+            return "Yesterday"
+        elif delta.days > 1:
+            return f"Due in {delta.days} days"
+        elif delta.days < -1:
+            return f"Due {abs(delta.days)} days ago"
 
     def __str__(self):
         return f"{self.id} {self.name} - u{self.user} - r{self.recurring}"

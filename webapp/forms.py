@@ -12,7 +12,26 @@ class LoginForm(forms.Form):
 class AddItemForm(forms.ModelForm):
     class Meta:
         model = Item
-        fields = ["name"]
+        fields = ["name", "user"]
+
+
+class ChoreForm(forms.ModelForm):
+    class Meta:
+        model = Item
+        fields = [
+            "name",
+            "user",
+            "list",
+            "recurring",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["recurring"].initial = True
+        self.fields["recurring"].disabled = True
+
+        self.fields["list"].initial = List.objects.get(name="chores")
+        self.fields["list"].disabled = True
 
 
 class AddListForm(forms.ModelForm):

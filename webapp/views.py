@@ -1,12 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
-from webapp.forms import AddItemForm, AddListForm, MealFormSet
+from webapp.forms import AddItemForm, AddListForm, MealFormSet, ChoreForm
 from webapp.models import Item, List, Meal, User
 from webapp.utils.htmx import HTMX
 
@@ -82,6 +82,53 @@ def dashboard_complete_task(request, id: int):
     item.complete_task()
 
     return HTMX.redirect(reverse("dashboard"))
+
+
+def dashboard_chores(request, user_id: int):
+    return render(
+        request,
+        "dashboard_chores.jinja",
+        context={
+            "user": User.objects.get(id=user_id),
+        },
+    )
+
+
+def chores(request):
+    form = ChoreForm()
+
+    if request.method == "POST":
+        form = ChoreForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = ChoreForm()
+    elif request.method == "GET":
+        id = request.GET.get("id")
+        if id:
+            item = Item.objects.get(id=id)
+            form = ChoreForm(instance=item)
+
+    return render(
+        request,
+        "chores.jinja",
+        context={
+            "users": User.objects.all(),
+            "form": form,
+        },
+    )
+
+
+def chores_edit(request, id: int):
+    if request.method == "DELETE":
+        Item.objects.get(id=id).delete()
+    elif request.method == "PUT":
+        item = Item.chores_objects.get(id=id)
+        put_data = QueryDict(request.body.decode("utf-8"))
+        form = ChoreForm(data=put_data, instance=item)
+        if form.is_valid():
+            form.save()
+
+    return HTMX.redirect(reverse("chores"))
 
 
 class ItemsView(View):

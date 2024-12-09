@@ -6,9 +6,14 @@ from django.db import migrations
 def populate_initial_data(apps, schema_editor):
     # Get the model classes (using apps.get_model() to ensure compatibility across migrations)
     List = apps.get_model("webapp", "List")
-
     List.objects.create(name="chores")
     List.objects.create(name="groceries")
+
+    User = apps.get_model("webapp", "User")
+    User.objects.create(name="Ivan")
+    User.objects.create(name="Megan")
+    User.objects.create(name="Isabela")
+    User.objects.create(name="Luca")
 
 
 class Migration(migrations.Migration):

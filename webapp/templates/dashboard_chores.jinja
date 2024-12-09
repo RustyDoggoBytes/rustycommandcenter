@@ -1,0 +1,24 @@
+{% extends 'haos_layout.jinja' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block main %}
+    <article>
+        <header><h1>{{ user.name }}</h1></header>
+        <table>
+            {% for chore in user.chores %}
+                <tr>
+                    <td>
+                        <hgroup>
+                            <h4>
+                                {{ chore.name }}
+                            </h4>
+                            <p>Due: {{ chore.relative_date_string }}</p>
+                        </hgroup>
+                    </td>
+                    <td>
+                        <button hx-post="{% url "dashboard-task-complete" id=chore.id %}">Done</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+{% endblock %}
