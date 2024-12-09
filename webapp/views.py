@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import TemplateView
 
 from webapp.forms import AddItemForm, AddListForm, MealFormSet
@@ -45,6 +46,7 @@ def meal_plan_view(request):
 
 
 class DashboardView(View):
+    @xframe_options_exempt
     def get(self, request):
         user_chores = []
         for user in User.objects.all():
