@@ -1,23 +1,19 @@
 {% extends 'haos_layout.jinja' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Dashboard - Meal{% endblock %}
 {% block main %}
-    <article>
-        <header>
-            <h3>Breakfast</h3>
-        </header>
-        {{ meals.breakfast }}
-    </article>
-    <article>
-        <header>
-            <h3>Lunch</h3>
-        </header>
-        {{ meals.lunch }}
-    </article>
-    <article>
-        <header>
-            <h3>Dinner</h3>
-        </header>
-        {{ meals.dinner }}
-    </article>
+    <table>
+        <tr>
+            <th><strong>Breakfast</strong></th>
+            <th>{{ meals.breakfast }}</th>
+        </tr>
+        <tr>
+            <th><strong>Lunch</strong></th>
+            <th>{{ meals.Lunch }}</th>
+        </tr>
+        <tr>
+            <th><strong>Breakfast</strong></th>
+            <th>{{ meals.Dinner }}</th>
+        </tr>
+    </table>
 {% endblock %}
