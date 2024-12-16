@@ -1,4 +1,5 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from django.db import models
 
@@ -101,8 +102,10 @@ class Meal(BaseModel):
 
     @staticmethod
     def today():
+        timezone = ZoneInfo("America/Denver")
+        today = datetime.now(timezone).date().weekday()
         today_meal, _ = Meal.objects.get_or_create(
-            day_of_week=datetime.today().weekday()
+            day_of_week=today,
         )
         return today_meal
 
