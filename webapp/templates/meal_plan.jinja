@@ -5,27 +5,17 @@
     <form method="post">
         {{ formset.management_form }}
         {% csrf_token %}
-        <h2>Meal Plan</h2>
 
-        <table>
-            <thead>
-            <tr>
-                <th></th>
-                <th>Breakfast</th>
-                <th>Lunch</th>
-                <th>Dinner</th>
-            </tr>
-
-            </thead>
-            {% for form in formset %}
-                <tr>
-                    <td>{{ form.instance.get_dow_display }}{{ form.day_of_week }}{{ form.id }}</td>
-                    <td>{{ form.breakfast }}</td>
-                    <td>{{ form.lunch }}</td>
-                    <td>{{ form.dinner }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% for form in formset %}
+            <article>
+                <header>
+                    {{ form.instance.get_dow_display }}
+                </header>
+                <div class="grid">
+                    {{ form }}
+                </div>
+            </article>
+        {% endfor %}
 
         <button type="submit">Save Meals</button>
     </form>
